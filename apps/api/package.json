@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "nest start --watch",
     "start": "node dist/main.js",
+    "prebuild": "npm run build -w @student-task-manager/shared",
     "build": "tsc -p tsconfig.json",
+    "pretypecheck": "npm run build -w @student-task-manager/shared",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/*.test.cjs"
   },

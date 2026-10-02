@@ -70,7 +70,26 @@ npx supabase link --project-ref <project-ref>
 npx supabase db push
 ```
 
-These commands change the linked project, so verify its reference before pushing. Alternatively, run the initial migration in the project's SQL editor once. For later migrations, consistently use the CLI migration history. Replace both frontend and API Supabase URLs/keys with that project's URL and anon/publishable key. The schema backfills users that existed before migration without duplicating profiles or default names.
+These commands change the linked project, so verify its reference before pushing. Prefer the CLI for initial setup and later migrations so the database and migration history stay synchronized. Replace both frontend and API Supabase URLs/keys with that project's URL and anon/publishable key. The schema backfills users that existed before migration without duplicating profiles or default names.
+
+### If the initial migration was already run in SQL Editor
+
+Running the entire initial migration successfully in Supabase SQL Editor creates the schema but does not record it in the CLI migration history. A later `db push` may try to apply it again and fail with `relation "profiles" already exists`.
+
+Only if the entire, unchanged `supabase/migrations/20261001000000_initial_workspace.sql` previously completed successfully against this same project, register that migration as applied:
+
+```sh
+npx supabase login
+npx supabase link --project-ref <project-ref>
+npx supabase migration list
+npx supabase migration repair --status applied 20261001000000
+npx supabase migration list
+npx supabase db push
+```
+
+The repair updates migration history without rerunning the SQL or deleting application data. Confirm that `20261001000000` appears in both the local and remote columns afterward. If it is already recorded remotely, check that the failing deployment targets the same project and uses the tracked migration workflow rather than executing the SQL file directly.
+
+The existence of `profiles` alone does not prove the migration completed. If only some statements ran, or the table predates this app, compare the existing schema, policies, functions, and triggers against the migration before repairing history. Do not reset the hosted database or change the initial migration to silently skip existing tables. See Supabase's [migration history documentation](https://supabase.com/docs/guides/deployment/database-migrations#diagnosing-and-fixing-sync-errors).
 
 ## Database checks
 
@@ -93,18 +112,22 @@ Use a local/disposable database for this file. It inserts two temporary auth use
 
 ## Vercel deployment
 
+Apply Supabase migrations separately using the tracked CLI workflow above. The Vercel frontend/API build commands below compile application code and do not run SQL migrations. If a custom build step reruns the initial SQL file on every deployment, remove that step after provisioning the database; manage later changes with new migrations.
+
 Use two Vercel projects connected to this npm workspace repository. Enable access to source files outside each project's Root Directory so both can build `packages/shared`. This is Vercel's standard [monorepo project model](https://vercel.com/docs/monorepos).
 
-| Setting          | Frontend project                                                                                          | API project                                                                                               |
-| ---------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Root Directory   | `apps/web`                                                                                                | `apps/api`                                                                                                |
-| Framework        | Vite                                                                                                      | NestJS                                                                                                    |
-| Node.js          | 22.x                                                                                                      | 22.x                                                                                                      |
-| Install command  | `cd ../.. && npm ci`                                                                                      | `cd ../.. && npm ci`                                                                                      |
-| Build command    | `cd ../.. && npm run build -w @student-task-manager/shared && npm run build -w @student-task-manager/web` | `cd ../.. && npm run build -w @student-task-manager/shared && npm run build -w @student-task-manager/api` |
-| Output directory | `dist`                                                                                                    | Leave the framework default                                                                               |
+| Setting          | Frontend project                                                                                          | API project                 |
+| ---------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
+| Root Directory   | `apps/web`                                                                                                | `apps/api`                  |
+| Framework        | Vite                                                                                                      | NestJS                      |
+| Node.js          | 22.x                                                                                                      | 22.x                        |
+| Install command  | `cd ../.. && npm ci`                                                                                      | `cd ../.. && npm ci`        |
+| Build command    | `cd ../.. && npm run build -w @student-task-manager/shared && npm run build -w @student-task-manager/web` | `npm run build`             |
+| Output directory | `dist`                                                                                                    | Leave the framework default |
 
 The API's `src/main.ts` follows Vercel's detected NestJS entrypoint convention. Vercel runs the NestJS application as a function; see [NestJS on Vercel](https://vercel.com/docs/frameworks/backend/nestjs). The frontend uses the [Vite framework](https://vercel.com/docs/frameworks/frontend/vite).
+
+The API's `prebuild` hook builds `@student-task-manager/shared` before TypeScript compilation, including on a clean checkout where `packages/shared/dist` does not yet exist. With Root Directory `apps/api`, use `npm run build`; from the repository root, use `npm run build -w @student-task-manager/api`. Both commands run the hook. Its standalone typecheck also builds shared declarations first. Keep the API Output Directory override disabled and allow source files outside the Root Directory so the shared workspace remains available.
 
 Set API environment values:
 
