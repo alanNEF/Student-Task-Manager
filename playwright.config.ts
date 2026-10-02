@@ -14,7 +14,7 @@ export default defineConfig({
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
     command:
-      'npm run build -w @student-task-manager/shared && npm run dev -w @student-task-manager/web -- --host 127.0.0.1 --port 5174 --strictPort',
+      'npm run build -w @student-task-manager/shared && npm run dev -w @student-task-manager/web -- --host 127.0.0.1 --port 5174 --strictPort --force',
     url: 'http://127.0.0.1:5174',
     reuseExistingServer: false,
     timeout: 60_000,
