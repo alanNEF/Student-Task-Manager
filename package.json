@@ -1,0 +1,29 @@
+{
+  "name": "student-task-manager",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build -w @student-task-manager/shared && concurrently -k -n api,web \"npm run dev -w @student-task-manager/api\" \"npm run dev -w @student-task-manager/web\"",
+    "dev:demo": "npm run build -w @student-task-manager/shared && npm run dev -w @student-task-manager/web",
+    "build": "npm run build -w @student-task-manager/shared && npm run build -w @student-task-manager/api && npm run build -w @student-task-manager/web",
+    "typecheck": "npm run build -w @student-task-manager/shared && npm run typecheck --workspaces --if-present",
+    "test": "npm run build -w @student-task-manager/shared && npm run test --workspaces --if-present",
+    "test:e2e": "playwright test",
+    "test:db": "bash scripts/test-db.sh",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
+  }
+}
