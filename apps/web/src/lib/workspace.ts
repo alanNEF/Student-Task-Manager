@@ -156,7 +156,21 @@ export function loadDemoWorkspace(): Workspace {
             value.columns.some((column) => column.id === task.status_id),
         )
       )
-        return value;
+        return {
+          ...value,
+          tags: value.tags.map((tag) =>
+            tag.name === 'Class' && tag.color === '#8b5cf6'
+              ? { ...tag, color: '#2563eb' }
+              : tag,
+          ),
+          columns: value.columns.map((column) =>
+            column.name === 'Done' &&
+            column.is_done &&
+            column.color === '#8b5cf6'
+              ? { ...column, color: '#2563eb' }
+              : column,
+          ),
+        };
     }
   } catch {
     /* An unavailable or malformed browser store should not stop the local demo. */

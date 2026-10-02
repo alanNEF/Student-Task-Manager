@@ -63,7 +63,7 @@ export type UpdateColumnInput = Partial<CreateColumnInput>;
 export type TaskPriority = 'overdue' | 'urgent' | 'upcoming' | 'none';
 
 export const DEFAULT_TAGS = [
-  { name: 'Class', color: '#8b5cf6' },
+  { name: 'Class', color: '#2563eb' },
   { name: 'Job Search', color: '#f59e0b' },
   { name: 'Personal', color: '#14b8a6' },
 ] as const;
@@ -71,7 +71,7 @@ export const DEFAULT_TAGS = [
 export const DEFAULT_COLUMNS = [
   { name: 'To-Do', color: '#94a3b8', position: 0, is_done: false },
   { name: 'In-Progress', color: '#eab308', position: 1, is_done: false },
-  { name: 'Done', color: '#8b5cf6', position: 2, is_done: true },
+  { name: 'Done', color: '#2563eb', position: 2, is_done: true },
 ] as const;
 
 // A date-only deadline ends in the student's local timezone.
