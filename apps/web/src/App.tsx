@@ -26,6 +26,7 @@ import { useWorkspace } from '@/hooks/use-workspace';
 import { workload } from '@/lib/workspace';
 import { cn } from '@/lib/utils';
 import { configurationError } from '@/lib/api';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 const TaskEditor = lazy(() =>
   import('@/components/task-editor').then((module) => ({
@@ -107,6 +108,7 @@ export default function App() {
   if (configurationError)
     return (
       <main className="full-state">
+        <ThemeToggle />
         <div className="brand-mark">
           <GraduationCap />
         </div>
@@ -119,6 +121,7 @@ export default function App() {
   if (state.authLoading)
     return (
       <div className="full-state">
+        <ThemeToggle />
         <div className="brand-mark">
           <GraduationCap />
         </div>
@@ -134,6 +137,7 @@ export default function App() {
             <GraduationCap />
           </div>
           <span>Student Task Manager</span>
+          <ThemeToggle />
         </div>
         <main className="login-card">
           <span className="eyebrow">
@@ -185,7 +189,7 @@ export default function App() {
               </div>
             </div>
             <div>
-              <span className="color-dot" style={{ background: '#8b5cf6' }} />
+              <span className="color-dot" style={{ background: '#2563eb' }} />
               Done
               <div className="preview-card">
                 <Check size={13} /> Lab report submitted
@@ -300,6 +304,7 @@ export default function App() {
           </div>
           <div className="topbar-actions">
             {state.isDemo && <span className="demo-pill">Demo workspace</span>}
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="icon"
@@ -403,7 +408,7 @@ export default function App() {
                 <div
                   className="progress-ring"
                   style={{
-                    background: `conic-gradient(var(--primary) ${percent}%, #eae6f1 0)`,
+                    background: `conic-gradient(var(--primary) ${percent}%, var(--border) 0)`,
                   }}
                 >
                   <span>

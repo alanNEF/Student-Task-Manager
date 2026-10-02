@@ -51,7 +51,7 @@ function SettingsEditor({
   onClose: () => void;
 }) {
   const [name, setName] = useState(editor.item?.name ?? '');
-  const [color, setColor] = useState(editor.item?.color ?? '#8b5cf6');
+  const [color, setColor] = useState(editor.item?.color ?? '#2563eb');
   const [isDone, setIsDone] = useState(
     editor.type === 'column' && (editor.item?.is_done ?? false),
   );
