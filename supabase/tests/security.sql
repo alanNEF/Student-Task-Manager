@@ -37,6 +37,8 @@ select pg_temp.assert_true((select count(*) = 2 from public.profiles where id in
 select pg_temp.assert_true((select count(*) = 3 from public.board_columns where user_id = '11111111-1111-4111-8111-111111111111'), 'signup creates default columns');
 select pg_temp.assert_true((select count(*) = 3 from public.tags where user_id = '11111111-1111-4111-8111-111111111111'), 'signup creates default tags');
 select pg_temp.assert_true((select is_done from public.board_columns where user_id = '11111111-1111-4111-8111-111111111111' and name = 'Done'), 'default Done column counts completion');
+select pg_temp.assert_true((select color = '#2563eb' from public.board_columns where user_id = '11111111-1111-4111-8111-111111111111' and name = 'Done'), 'new accounts receive a blue Done column');
+select pg_temp.assert_true((select color = '#2563eb' from public.tags where user_id = '11111111-1111-4111-8111-111111111111' and name = 'Class'), 'new accounts receive a blue Class tag');
 
 select set_config('test.a_column', (select id::text from public.board_columns where user_id = '11111111-1111-4111-8111-111111111111' and name = 'To-Do'), true);
 select set_config('test.a_done', (select id::text from public.board_columns where user_id = '11111111-1111-4111-8111-111111111111' and name = 'Done'), true);

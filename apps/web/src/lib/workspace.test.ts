@@ -12,6 +12,18 @@ import {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('student workspace', () => {
+  it('recolors saved demo defaults while preserving custom colors and tasks', () => {
+    const demo = createDemoWorkspace();
+    demo.tags[0].color = '#8b5cf6';
+    demo.columns[2].color = '#8b5cf6';
+    demo.tags[1].color = '#8b5cf6';
+    vi.stubGlobal('localStorage', { getItem: () => JSON.stringify(demo) });
+    const restored = loadDemoWorkspace();
+    expect(restored.tags[0].color).toBe('#2563eb');
+    expect(restored.columns[2].color).toBe('#2563eb');
+    expect(restored.tags[1].color).toBe('#8b5cf6');
+    expect(restored.tasks).toEqual(demo.tasks);
+  });
   it('seeds the complete default workflow with dates relative to the student’s local day', () => {
     const now = new Date(2026, 9, 1, 12);
     const demo = createDemoWorkspace(now);

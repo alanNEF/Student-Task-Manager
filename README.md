@@ -20,6 +20,7 @@ To use Google sign-in and database persistence, follow [the setup guide](docs/se
 - Task creation, editing, deletion, Markdown preview, optional hours and due date, and multiple tags.
 - Default To-Do, In-Progress, and Done columns; drag tasks between columns or change status in the task editor.
 - Tag filtering, recommended task ordering, completion percentage, and remaining effort.
+- Blue accents and a top-right light/dark toggle that follows device appearance until a choice is saved in the browser.
 - Settings with account name/email, tag creation/editing/deletion, and customizable columns with a destination for tasks when deleting a column.
 - Supabase Google OAuth wiring, profile/default-workspace initialization, owner-scoped row-level security, and transactional task/tag updates.
 - A NestJS API that verifies Supabase access tokens, validates request data, and accesses the database under the student's own session.

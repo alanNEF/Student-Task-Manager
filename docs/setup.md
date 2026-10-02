@@ -149,6 +149,10 @@ Set environment values for the environments you actually use, then redeploy the 
 
 After deploying, check `https://<api-project>.vercel.app/api/health`, then exercise Google login, task creation/reload/edit/delete, tag and column customization, sign-out, and two-account isolation. Check provider logs for auth errors and API logs for configuration issues. No hosted migration, Google login, or Vercel deployment has been exercised without project credentials.
 
+## Appearance update for existing projects
+
+After updating the application, run `npx supabase db push` from the linked repository to apply `20261002000000_blue_workspace_defaults.sql`. This recolors the original purple Class tag and completed Done column to blue, and updates new-account defaults. Custom names and other colors are preserved. The application accent colors, favicon, and light/dark toggle are included in the frontend build; theme preference is saved in the browser and initially follows device appearance.
+
 ## Performance acceptance
 
 The under-one-second home-page requirement needs measurement on the deployed authenticated flow. Measure navigation-to-visible-board and Largest Contentful Paint with a realistic task set, a stated device/network profile, and both cold and warm API requests. Check browser performance traces, API latency, database query timing, and bundle size. A fast local demo or passing unit tests does not establish this target.

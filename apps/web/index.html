@@ -3,7 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f8f7f5" />
+    <meta name="theme-color" content="#f8fafc" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // Set the theme before the first paint, including when storage is blocked.
+      let preference;
+      try {
+        preference = localStorage.getItem('student-task-manager.theme');
+      } catch {}
+      const dark =
+        preference === 'dark' ||
+        (preference !== 'light' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      document
+        .querySelector('meta[name="theme-color"]')
+        .setAttribute('content', dark ? '#0f172a' : '#f8fafc');
+    </script>
     <meta
       name="description"
       content="A calmer place for assignments, applications, and everything in between."
